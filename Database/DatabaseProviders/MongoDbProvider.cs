@@ -6,36 +6,40 @@ namespace ExpiryFood.Database.DatabaseProviders
 {
     public class MongoDbProvider : IDatabaseProvider
     {
-        private readonly IMongoCollection<Product> _foods;
+        private readonly IMongoCollection<Product> _products;
         public MongoDbProvider(string connectionString) 
         {
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase("Food");
-            _foods = database.GetCollection<Product>("Food");
+            _products = database.GetCollection<Product>("Food");
         }
         public async Task AddFoodAsync(Product food)
         {
-            await _foods.InsertOneAsync(food);
+            await _products.InsertOneAsync(food);
         }
 
         public async Task<List<Product>> GetAllFoodAsync()
         {
-            return await _foods.Find(_ => true).ToListAsync();
+            return await _products.Find(_ => true).ToListAsync();
         }
 
         public async Task<Product> GetFoodAsync(int id)
         {
-            return await _foods.Find(f => f.Id == id).FirstAsync();
+            return await _products.Find(f => f.Id == id).FirstAsync();
         }
 
         public async Task RemoveFoodAsync(int id)
         {
-            await _foods.FindOneAndDeleteAsync(f => f.Id == id);
+            await _products.FindOneAndDeleteAsync(f => f.Id == id);
         }
 
         public async Task UpdateFoodAsync(Product food)
         {
-            await _foods.ReplaceOneAsync(f => f.Id == food.Id, food);
+            await _products.ReplaceOneAsync(f => f.Id == food.Id, food);
+        }
+        public async Task<List<Product>> GetExpiryProducts(DateTime tresholdDate)
+        {
+            return await _products.Find(p => p.ExpireAt < tresholdDate).ToListAsync();
         }
     }
 }

@@ -39,5 +39,9 @@ namespace ExpiryFood.Database.DatabaseProviders
         {
             return Task.Run(() => _products.Update(food));
         }
+        public Task<List<Product>> GetExpiryProducts(DateTime tresholdDate)
+        {
+            return Task.FromResult(_products.Find(p => p.ExpireAt < tresholdDate).ToList());
+        }
     }
 }

@@ -2,6 +2,12 @@ using ExpiryFood.Database.DatabaseProviders;
 using ExpiryFood.Database;
 using ExpiryFood.Repositories;
 using ExpiryFood.Services;
+using Microsoft.Extensions.Configuration;
+using Telegram.Bot.Types;
+using ExpiryFood.Notification;
+using ExpiryFood.Notification.NotificationProvider;
+using Telegram.Bot;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,10 +28,31 @@ switch (dbConfig!.Type)
         throw new Exception("Unsupported database type");
 }
 
-// Register DB factory
+// Add notification
+var notificationConfig = builder.Configuration.GetSection("NotificationConfig");
+var notificationType = notificationConfig["Type"];
+
+var providers = new List<INotificationProvider>();
+
+if (notificationType == "Telegram" || notificationType == "Both")
+{
+    providers.Add(NotificationProviderFactory.CreateTelegramProvider(builder.Configuration));
+}
+
+//if (notificationType == "Email" || notificationType == "Both")
+//{
+//    providers.Add(NotificationProviderFactory.CreateEmailProvider(builder.Configuration));
+//}
+
+builder.Services.AddSingleton<List<INotificationProvider>>(providers);
+
 builder.Services.AddSingleton<DatabaseContext>();
 builder.Services.AddScoped<ExpiryFood.Repositories.Interface.IProductRepository, ProductRepository>();
+
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddHostedService<ExpiryNotificationService>();
+
+
 
 // Add services to the container.
 
@@ -52,6 +79,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-// TODO
-// Add FoodService

@@ -1,4 +1,5 @@
-﻿using ExpiryFood.Database;
+﻿using System.Collections;
+using ExpiryFood.Database;
 using ExpiryFood.Models;
 using ExpiryFood.Repositories.Interface;
 
@@ -31,6 +32,11 @@ namespace ExpiryFood.Services
         public async Task<IEnumerable<Product>> GetAll()
         {
             return await _repository.GetAll();
+        }
+        public async Task<IEnumerable<Product>> GetExpiryProducts(int daysThreshold)
+        {
+            var tresholdDate = DateTime.Now.AddDays(daysThreshold);
+            return await _repository.GetExpiryProducts(tresholdDate);
         }
     }
 }

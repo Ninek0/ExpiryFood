@@ -10,5 +10,6 @@ namespace ExpiryFood.Repositories.Interface
         void Delete(int id);
         Task<Product> Get(int id);
         Task<IEnumerable<Product>> GetAll();
+        Task<IEnumerable<Product>> GetExpiryProducts(DateTime tresholdDate);
     }
 }

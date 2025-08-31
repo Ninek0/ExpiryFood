@@ -14,5 +14,6 @@ namespace ExpiryFood.Database
         public Task<Product> GetFoodAsync(int id) => _databaseProvider.GetFoodAsync(id);
         public Task UpdateFoodAsync(Product product) => _databaseProvider.UpdateFoodAsync(product);
         public Task<List<Product>> GetAllFoodAsync() => _databaseProvider.GetAllFoodAsync();
+        public Task<List<Product>> GetExpiryProducts(DateTime tresholdDate) => _databaseProvider.GetExpiryProducts(tresholdDate);
     }
 }

@@ -31,5 +31,9 @@ namespace ExpiryFood.Repositories
         {
             return await _databaseContext.GetAllFoodAsync();
         }
+        public async Task<IEnumerable<Product>> GetExpiryProducts(DateTime tresholdDate)
+        {
+            return await _databaseContext.GetExpiryProducts(tresholdDate);
+        }
     }
 }

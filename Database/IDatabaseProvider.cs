@@ -9,5 +9,6 @@ namespace ExpiryFood.Database
         Task<Product> GetFoodAsync(int id);
         Task UpdateFoodAsync(Product food);
         Task<List<Product>> GetAllFoodAsync();
+        Task<List<Product>> GetExpiryProducts(DateTime tresholdDate);
     }
 }
