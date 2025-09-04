@@ -1,6 +1,0 @@
-@ExpiryFood_HostAddress = http://localhost:5007
-
-GET {{ExpiryFood_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

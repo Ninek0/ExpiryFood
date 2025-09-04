@@ -12,7 +12,6 @@ namespace ExpiryFood.Services
         {
             _repository = repository;
         }
-
         public void Add(Product product)
         {
             _repository.Add(product);
